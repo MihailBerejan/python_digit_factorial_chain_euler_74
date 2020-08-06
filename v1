@@ -1,0 +1,39 @@
+from math import factorial
+import itertools
+import time
+#sum of digits factorials
+def sofd(number):
+    result = [int(i) for i in str(number)]
+    sofd = 0
+    for i in range(len(result)):
+        sofd += factorial(result[i])
+    return sofd
+
+def digit_factorial_chain(number):
+    result = []
+    while number not in result:
+        result.append(number)
+        number = sofd(number)
+    return result
+
+start = time.time()
+n = 1
+while len(digit_factorial_chain(n))<60:
+    n+=1
+else:
+    block = digit_factorial_chain(n)
+    
+print(sofd(n))
+
+perms = sorted(set(["".join(perm) for perm in itertools.permutations(str(sofd(n)), len(str(sofd(n))))]))
+    
+count = 0    
+for i in range(n,1000000):
+    if str(sofd(i)) in perms:
+        print(i, "yes")
+        count += 1
+    elif sofd(i) in block[2::]:
+        continue
+        
+print(count)
+print("Execution time: %.20f sec." %(time.time() - start))
